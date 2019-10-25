@@ -1,0 +1,28 @@
+{
+  "name": "auth-api",
+  "version": "1.0.0",
+  "description": "A mysql authentication api",
+  "main": "index.js",
+  "repository": "git@github.com:BILLthebuilder/auth-api.git",
+  "author": "github.com/BILLthebuilder",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql2": "^1.7.0",
+    "sequelize": "^5.21.1"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "devDependencies": {
+    "eslint": "^6.5.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "nodemon": "^1.19.4",
+    "prettier": "^1.18.2"
+  }
+}
