@@ -70,4 +70,19 @@ router.delete('/users/delete/me', authenticate, async (req, res) => {
     }
 });
 
+// Logout the user and destroy the jwt
+router.post('/users/logout', authenticate, async (req, res) => {
+    try {
+        req.user.tokens = req.user.tokens.filter(token => {
+            return token.token !== req.token;
+        });
+        await req.user.save();
+        res.send();
+    } catch (error) {
+        res.status(500).send();
+    }
+});
+
+// Logout every user and destroy all tokens
+
 module.exports = router;
