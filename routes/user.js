@@ -6,13 +6,14 @@ const authenticate = require('../auth/auth');
 const router = Router();
 
 // Create a new user
-router.post('/users', async (req, res) => {
+router.post('/users/signup', async (req, res) => {
     const user = new User(req.body);
     try {
         const token = await user.newAuthToken();
         res.status(201).send({ user, token });
     } catch (e) {
-        res.status(400).send(e);
+        res.status(400).send({ message: 'invalid request' });
+        console.log(e);
     }
 });
 
