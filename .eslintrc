@@ -10,6 +10,7 @@
         "no-console": "off",
         "no-underscore-dangle":"off",
         "no-return-assign":"off",
+        "consistent-return":"off",
         "prettier/prettier": [
             "error"
         ]
