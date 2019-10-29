@@ -84,5 +84,15 @@ router.post('/users/logout', authenticate, async (req, res) => {
 });
 
 // Logout every user and destroy all tokens
+// This endpoint is for purposes of testing only
+router.post('/users/logoutall', authenticate, async (req, res) => {
+    try {
+        req.user.tokens = [];
+        await req.user.save();
+        res.send();
+    } catch (error) {
+        res.status(500).send();
+    }
+});
 
 module.exports = router;
