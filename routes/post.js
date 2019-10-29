@@ -1,6 +1,7 @@
 const { ObjectID } = require('mongodb');
 const { Router } = require('express');
 const Post = require('../models/Post');
+const authenticate = require('../auth/auth');
 
 const router = Router();
 
@@ -17,4 +18,4 @@ router.post('/posts', authenticate, async (req, res) => {
     }
 });
 
-module.exports = routes;
+module.exports = router;
