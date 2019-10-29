@@ -45,4 +45,33 @@ router.get('/posts/:id', authenticate, async (req, res) => {
         res.status(500).send();
     }
 });
+
+// Create an endpoint to edit a post
+router.patch('/posts/:id', authenticate, async (req, res) => {
+    const _id = req.params.id;
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ['description', 'title'];
+    const isValidOperation = updates.every(update => allowedUpdates.includes(update));
+    if (!isValidOperation) {
+        res.status(400).send({ error: 'Invalid updates' });
+    }
+    if (!ObjectID.isValid(_id)) {
+        res.status(404).send();
+    }
+    try {
+        const post = await Post.findOne({ _id: req.params.id, author: req.user._id });
+
+        if (!post) {
+            res.status(404).send();
+        }
+
+        updates.forEach(update => (post[update] = req.body[update]));
+        await post.save();
+
+        res.send(post);
+    } catch (error) {
+        res.status(400).send();
+    }
+});
+
 module.exports = router;
