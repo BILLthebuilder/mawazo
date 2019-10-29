@@ -56,4 +56,18 @@ router.patch('/users/me', authenticate, async (req, res) => {
     }
 });
 
+// Delete user endpoint
+router.delete('/users/me', authenticate, async (req, res) => {
+    if (!ObjectID.isValid(req.user._id)) {
+        return res.status(404).send();
+    }
+
+    try {
+        await req.user.remove();
+        res.send(req.user);
+    } catch (error) {
+        res.status(500).send();
+    }
+});
+
 module.exports = router;
