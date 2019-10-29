@@ -74,4 +74,21 @@ router.patch('/posts/:id', authenticate, async (req, res) => {
     }
 });
 
+// Endpoint to delete a post
+router.delete('/posts/:id', authenticate, async (req, res) => {
+    const _id = req.params.id;
+    if (!ObjectID.isValid(_id)) {
+        return res.status(404).send();
+    }
+    try {
+        const deletepost = await Post.findOneAndDelete({ _id, author: req.user._id });
+        if (!deletepost) {
+            return res.status(404).send();
+        }
+        res.send(deletepost);
+    } catch (error) {
+        res.status(500).send();
+    }
+});
+
 module.exports = router;
