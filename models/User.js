@@ -61,6 +61,22 @@ const UserSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', UserSchema);
 
+// Check if logged in user has valid credentials
+UserSchema.statics.checkValidCredentials = async (email, password) => {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        throw new Error('User does not exist');
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+        throw new Error('Wrong username/password combination');
+    }
+
+    return user;
+};
+
 UserSchema.methods.newAuthToken = async () => {
     const user = this;
     const token = jwt.sign({ _id: user.id.toString() }, process.env.SECRET, {
