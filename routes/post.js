@@ -29,4 +29,20 @@ router.get('/posts', async (req, res) => {
     }
 });
 
+// Get a single post
+router.get('/posts/:id', authenticate, async (req, res) => {
+    const _id = req.params.id;
+    if (!ObjectID.isValid(_id)) {
+        return res.status(404).send();
+    }
+    try {
+        const post = await Post.findOne({ _id, author: req.user._id });
+        if (!post) {
+            return res.status(404).send();
+        }
+        res.send(post);
+    } catch (error) {
+        res.status(500).send();
+    }
+});
 module.exports = router;
