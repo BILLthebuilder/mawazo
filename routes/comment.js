@@ -31,4 +31,14 @@ router.post('/posts/:id/comment', authenticate, async (req, res) => {
     }
 });
 
+// Get all the comments related to the post
+router.get('/posts/:id/comment', async (req, res) => {
+    try {
+        const post = await Post.findOne({ _id: req.params.id });
+        await post.populate('comments').execPopulate();
+        res.send(post.comments);
+    } catch (error) {
+        res.status(500).send();
+    }
+});
 module.exports = router;
