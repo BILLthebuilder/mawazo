@@ -1,2 +1,3 @@
 # auth-api
-A mysql authentication api 
+
+A user authentication api with protected routes and jwt
