@@ -33,7 +33,7 @@ router.get('/users/me', authenticate, async (req, res) => {
 });
 
 // Edit user profile details
-router.patch('/users/me', authenticate, async (req, res) => {
+router.patch('/users/edit/me', authenticate, async (req, res) => {
     const updates = Object.keys(req.body);
     const allowedUpdates = ['name', 'email', 'password', 'age'];
     const isValidOperation = updates.every(update => allowedUpdates.includes(update));
@@ -57,7 +57,7 @@ router.patch('/users/me', authenticate, async (req, res) => {
 });
 
 // Delete user endpoint
-router.delete('/users/me', authenticate, async (req, res) => {
+router.delete('/users/delete/me', authenticate, async (req, res) => {
     if (!ObjectID.isValid(req.user._id)) {
         return res.status(404).send();
     }
