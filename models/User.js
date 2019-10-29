@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
 const UserSchema = new mongoose.Schema({
@@ -69,5 +70,14 @@ UserSchema.methods.newAuthToken = async () => {
     await user.save();
     return token;
 };
+
+// Hash our password before saving it in the db
+UserSchema.pre('save', async next => {
+    const user = this;
+    if (user.isModified('password')) {
+        user.password = await bcrypt.hash(user.password, 10);
+    }
+    next();
+});
 
 module.exports = User;
