@@ -1,7 +1,7 @@
 const { ObjectID } = require('mongodb');
 const { Router } = require('express');
-const Post = require('../models/Post');
-const Comment = require('../models/Comment');
+const Post = require('../models/post');
+const Comment = require('../models/comment');
 const authenticate = require('../auth/auth');
 
 const router = Router();
