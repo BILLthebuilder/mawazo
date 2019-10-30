@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const Post = require('./post');
 require('dotenv').config();
 
 const UserSchema = new mongoose.Schema({
@@ -59,9 +60,12 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-const User = mongoose.model('User', UserSchema);
+UserSchema.virtual('posts', {
+    ref: 'Post',
+    localField: '_id',
+    foreignField: 'author'
+});
 
-// Check if logged in user has valid credentials
 UserSchema.statics.checkValidCredentials = async (email, password) => {
     const user = await User.findOne({ email });
 
@@ -77,23 +81,39 @@ UserSchema.statics.checkValidCredentials = async (email, password) => {
     return user;
 };
 
-UserSchema.methods.newAuthToken = async () => {
+UserSchema.methods.newAuthToken = async function() {
     const user = this;
-    const token = jwt.sign({ _id: user.id.toString() }, process.env.SECRET, {
-        expiresIn: '7 days'
-    });
+    const token = jwt.sign({ _id: user.id.toString() }, process.env.SECRET);
     user.tokens = user.tokens.concat({ token });
     await user.save();
     return token;
 };
 
-// Hash our password before saving it in the db
-UserSchema.pre('save', async next => {
+UserSchema.methods.toJSON = function() {
+    const user = this;
+    const userObj = user.toObject();
+
+    delete userObj.password;
+    delete userObj.tokens;
+
+    return userObj;
+};
+
+// hash the plain text password before saving
+UserSchema.pre('save', async function(next) {
     const user = this;
     if (user.isModified('password')) {
         user.password = await bcrypt.hash(user.password, 10);
     }
     next();
 });
+
+UserSchema.pre('remove', async function(next) {
+    const user = this;
+    await Post.deleteMany({ author: user._id });
+    next();
+});
+
+const User = mongoose.model('User', UserSchema);
 
 module.exports = User;
