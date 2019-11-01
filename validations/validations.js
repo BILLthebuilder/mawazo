@@ -18,6 +18,15 @@ const userSchema = Joi.object({
         .required()
 });
 
+const userLoginSchema = Joi.object({
+    email: Joi.string()
+        .email({ minDomainSegments: 2 })
+        .required(),
+    password: Joi.string()
+        .regex(/^[a-zA-Z0-9]{3,32}$/)
+        .required()
+});
+
 const postSchema = Joi.object({
     title: Joi.string()
         .alphanum()
@@ -39,5 +48,6 @@ const commentSchema = Joi.object({
 module.exports = {
     userSchema,
     postSchema,
-    commentSchema
+    commentSchema,
+    userLoginSchema
 };
