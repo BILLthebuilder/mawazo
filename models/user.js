@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
+
 const Post = require('./post');
 require('dotenv').config();
 
@@ -35,8 +37,8 @@ const UserSchema = new mongoose.Schema({
         }
     ],
     createdAt: {
-        type: Date,
-        default: Date.now
+        type: String,
+        default: moment().format('dddd, MMMM Do YYYY, h:mm:ss a')
     }
 });
 
