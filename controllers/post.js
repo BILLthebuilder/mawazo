@@ -1,8 +1,18 @@
 const { ObjectID } = require('mongodb');
+const Joi = require('@hapi/joi');
+
 const Post = require('../models/post');
+const { postSchema } = require('../validations/validations');
 
 const postMethods = {
     async createPost(req, res) {
+        const { error } = Joi.validate(req.body, postSchema);
+        if (error) {
+            return res.status(400).json({
+                status: 400,
+                error: error.details[0].message
+            });
+        }
         const post = new Post({
             ...req.body,
             author: req.user._id
@@ -10,8 +20,8 @@ const postMethods = {
         try {
             await post.save();
             res.status(201).send(post);
-        } catch (error) {
-            res.status(400).send(error);
+        } catch (err) {
+            res.status(400).send(err.message);
         }
     },
     async getAll(req, res) {
