@@ -1,29 +1,29 @@
 const { Router } = require('express');
-const userMethod = require('../controllers/user');
+const userMethods = require('../controllers/user');
 const authenticate = require('../auth/auth');
 
 const router = Router();
 
 // Create a new user
-router.post('/users/signup', userMethod.signup);
+router.post('/users/signup', userMethods.signup);
 
 // Login a registered user
-router.post('/users/login', userMethod.login);
+router.post('/users/login', userMethods.login);
 
 // Enable a user to view their own user profile details
-router.get('/users/me', authenticate, userMethod.viewUser);
+router.get('/users/me', authenticate, userMethods.viewUser);
 
 // Edit user profile details
-router.patch('/users/edit/me', authenticate, userMethod.editUser);
+router.patch('/users/edit/me', authenticate, userMethods.editUser);
 
 // Delete user endpoint
-router.delete('/users/delete/me', authenticate, userMethod.deleteUser);
+router.delete('/users/delete/me', authenticate, userMethods.deleteUser);
 
 // Logout the user and destroy the jwt
-router.post('/users/logout', authenticate, userMethod.logoutUser);
+router.post('/users/logout', authenticate, userMethods.logoutUser);
 
 // Logout every user and destroy all tokens
 // This endpoint is for purposes of testing only
-router.post('/users/logoutall', authenticate, userMethod.logoutAll);
+router.post('/users/logoutall', authenticate, userMethods.logoutAll);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const { ObjectID } = require('mongodb');
 const User = require('../models/user');
 
-const userMethod = {
+const userMethods = {
     async signup(req, res) {
         const user = new User(req.body);
         try {
@@ -80,4 +80,4 @@ const userMethod = {
     }
 };
 
-module.exports = userMethod;
+module.exports = userMethods;
