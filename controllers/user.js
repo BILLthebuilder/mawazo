@@ -1,8 +1,18 @@
 const { ObjectID } = require('mongodb');
+const Joi = require('@hapi/joi');
+
 const User = require('../models/user');
+const { userSchema, userLoginSchema, userEditSchema } = require('../validations/validations');
 
 const userMethods = {
     async signup(req, res) {
+        const { error } = Joi.validate(req.body, userSchema);
+        if (error) {
+            return res.status(400).json({
+                status: 400,
+                error: error.details[0].message
+            });
+        }
         const user = new User(req.body);
         try {
             const token = await user.newAuthToken();
@@ -13,49 +23,56 @@ const userMethods = {
         }
     },
     async login(req, res) {
+        const { error } = Joi.validate(req.body, userLoginSchema);
+        if (error) {
+            return res.status(400).json({
+                status: 400,
+                error: error.details[0].message
+            });
+        }
         try {
             const user = await User.checkValidCredentials(req.body.email, req.body.password);
             const token = await user.newAuthToken();
-            res.send({ user, token });
-        } catch (error) {
-            res.status(400).send();
+            if (user) {
+                res.send({ user, token });
+            }
+        } catch (err) {
+            res.status(400).send(err.message);
         }
     },
     async viewUser(req, res) {
         res.send(req.user);
     },
     async editUser(req, res) {
-        const updates = Object.keys(req.body);
-        const allowedUpdates = ['name', 'email', 'password', 'age'];
-        const isValidOperation = updates.every(update => allowedUpdates.includes(update));
-        const { _id } = req.user;
-
-        if (!isValidOperation) {
-            res.status(400).send({ error: 'Invalid request' });
+        const { error } = Joi.validate(req.body, userEditSchema);
+        if (error) {
+            return res.status(400).json({
+                status: 400,
+                error: error.details[0].message
+            });
         }
-
+        const { _id } = req.user;
         if (!ObjectID.isValid(_id)) {
-            return res.status(404).send();
+            return res.status(404).send({ message: 'user not found' });
         }
 
         try {
-            updates.forEach(update => (req.user[update] = req.body[update]));
             await req.user.save();
             res.send(req.user);
-        } catch (error) {
-            res.status(400).send();
+        } catch (err) {
+            res.status(400).send(err.message);
         }
     },
     async deleteUser(req, res) {
         if (!ObjectID.isValid(req.user._id)) {
-            return res.status(404).send();
+            return res.status(404).send({ message: 'user not found!' });
         }
 
         try {
             await req.user.remove();
             res.send(req.user);
         } catch (error) {
-            res.status(500).send();
+            res.status(500).send(error.message);
         }
     },
     async logoutUser(req, res) {
