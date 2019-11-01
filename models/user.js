@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Post = require('./post');
@@ -13,38 +12,19 @@ const UserSchema = new mongoose.Schema({
     },
     age: {
         type: Number,
-        default: 0,
-        validate(value) {
-            if (value < 0) {
-                throw new Error('Age must be a positive number');
-            }
-        }
+        default: 0
     },
     email: {
         type: String,
         required: true,
         unique: true,
-        trim: true,
-        validate(value) {
-            if (!validator.isEmail(value)) {
-                throw new Error('Email is invalid!');
-            }
-        }
+        trim: true
     },
     password: {
         type: String,
         required: true,
         trim: true,
-        minlength: 7,
-        validate(value) {
-            if (validator.isEmpty(value)) {
-                throw new Error('Please enter your password!');
-            } else if (validator.equals(value.toLowerCase(), 'password')) {
-                throw new Error('Password is invalid!');
-            } else if (validator.contains(value.toLowerCase(), 'password')) {
-                throw new Error('Password should not contain password!');
-            }
-        }
+        minlength: 7
     },
     tokens: [
         {
