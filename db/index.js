@@ -5,7 +5,7 @@ const connection = mongoose
     .connect(
         `${process.env.HOST}${encodeURIComponent(process.env.PASSWORD)}${
             process.env.CLUSTER_NAME
-        }-mlgkq.mongodb.net/test?retryWrites=true&w=majority`,
+        }-mlgkq.mongodb.net/test?retryWrites=true&w=majority` /* process.env.LOCALDB */,
         {
             useNewUrlParser: true,
             useCreateIndex: true,
