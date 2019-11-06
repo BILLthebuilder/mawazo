@@ -46,6 +46,14 @@ const userMethods = {
     async viewUser(req, res) {
         res.send(req.user);
     },
+    async viewAllUsers(req, res) {
+        try {
+            const users = await User.find({});
+            res.send(users);
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    },
     async editUser(req, res) {
         const { error } = Joi.validate(req.body, userEditSchema);
         if (error) {
