@@ -94,7 +94,7 @@ const userMethods = {
             await req.user.save();
             res.send();
         } catch (error) {
-            res.status(500).send();
+            res.status(500).send(error.message);
         }
     },
     async logoutAll(req, res) {
@@ -103,7 +103,7 @@ const userMethods = {
             await req.user.save();
             res.send();
         } catch (error) {
-            res.status(500).send();
+            res.status(500).send(error.message);
         }
     }
 };
