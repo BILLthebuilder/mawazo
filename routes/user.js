@@ -13,6 +13,9 @@ router.post('/users/login', userMethods.login);
 // Enable a user to view their own user profile details
 router.get('/users/me', authenticate, userMethods.viewUser);
 
+// Enable an admin to view all the user details
+router.get('/users/all', /* authenticate, */ userMethods.viewAllUsers);
+
 // Edit user profile details
 router.patch('/users/edit/me', authenticate, userMethods.editUser);
 
