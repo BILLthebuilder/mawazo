@@ -52,12 +52,12 @@ UserSchema.statics.checkValidCredentials = async (email, password) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-        throw new Error('User does not exist');
+        throw new Error('Wrong email, the user does not exist');
     }
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-        throw new Error('Wrong username/password combination');
+        throw new Error('Wrong email/password combination');
     }
 
     return user;
@@ -89,6 +89,18 @@ UserSchema.pre('save', async function(next) {
     }
     next();
 });
+
+// UserSchema.pre('save', async function(next) {
+//     const user = this;
+//     User.find({ email: user.email }, function(err, docs) {
+//         if (!docs.length) {
+//             next();
+//         } else {
+//             console.log('Email exists');
+//             next(new Error('The email has been used, try another email'));
+//         }
+//     });
+// });
 
 UserSchema.pre('remove', async function(next) {
     const user = this;
