@@ -18,8 +18,11 @@ const userMethods = {
             const token = await user.newAuthToken();
             res.status(201).send({ user, token });
         } catch (e) {
-            res.status(400).send({ message: 'invalid request' });
-            console.log(e);
+            // Check if a duplicate email error is returned
+            if (!e.message.includes('E11000 duplicate key error collection:')) {
+                return res.status(400).send({ Error: 'Bad request' });
+            }
+            res.status(400).send({ Error: 'The email already exists' });
         }
     },
     async login(req, res) {
