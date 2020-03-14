@@ -18,6 +18,8 @@ npm install or yarn install
 open your browser at http://localhost:5000 
 
 ```
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/a29cfa3d4962c466de6c)
+
 #### User Endpoints
 
 | Request | Endpoint              | Function                                                                   |
