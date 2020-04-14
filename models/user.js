@@ -90,17 +90,17 @@ UserSchema.pre('save', async function(next) {
     next();
 });
 
-// UserSchema.pre('save', async function(next) {
-//     const user = this;
-//     User.find({ email: user.email }, function(err, docs) {
-//         if (!docs.length) {
-//             next();
-//         } else {
-//             console.log('Email exists');
-//             next(new Error('The email has been used, try another email'));
-//         }
-//     });
-// });
+UserSchema.pre('save', async function(next) {
+    const user = this;
+    User.find({ email: user.email }, function(err, docs) {
+        if (!docs.length) {
+            next();
+        } else {
+            console.log('Email exists');
+            next(new Error('The email has been used, try another email'));
+        }
+    });
+});
 
 UserSchema.pre('remove', async function(next) {
     const user = this;
