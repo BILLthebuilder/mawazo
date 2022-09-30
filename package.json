@@ -11,7 +11,7 @@
     "dev": "nodemon index.js"
   },
   "dependencies": {
-    "@hapi/joi": "15.0.3",
+    "@hapi/joi": "15.1.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "eslint": "^6.6.0",
